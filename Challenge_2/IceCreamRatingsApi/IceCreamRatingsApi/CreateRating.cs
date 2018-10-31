@@ -55,7 +55,7 @@ namespace IceCreamRatingsApi
             rating.UserNotes = data?.userNotes;
             rating.RatingValue = data?.rating;
 
-            //Call Patricio's code
+            //TODO: Call Patricio's code
 
             return new OkObjectResult("Rating created");
         }

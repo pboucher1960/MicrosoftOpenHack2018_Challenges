@@ -5,7 +5,6 @@ using System.Net;
 using System.Threading.Tasks;
 using Microsoft.Azure.Documents;
 using Microsoft.Azure.Documents.Client;
-using Newtonsoft.Json;
 using IceCreamRatingsApi.Models.DbAccess;
 using IceCreamRatingsApi.Models;
 
@@ -17,7 +16,7 @@ namespace IceCreamRatingsApi.Infrastructure
         private const string collectionName = "RatingCollection";
         private const string EndpointUrl = "https://openhacktable08.documents.azure.com:443";
         private const string PrimaryKey = "VZFwRgdsJhhlPXgeQVCmtgTBv1W09VICD91MYUXbIyVEEQRrVYvmOKasaZW6Pax1hsKfw7XRZeEa4Hp453LxjQ==";
-        private DocumentClient client;
+        private readonly DocumentClient client;
 
 
         public RatingRepository()
@@ -134,5 +133,27 @@ namespace IceCreamRatingsApi.Infrastructure
         {
             throw new NotImplementedException();
         }
+
+        #region IDisposable Support
+        private bool disposedValue = false; // To detect redundant calls
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    client.Dispose();
+                }
+
+                disposedValue = true;
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+        }
+        #endregion
     }
 }
