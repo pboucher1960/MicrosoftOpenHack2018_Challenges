@@ -10,6 +10,15 @@ namespace IceCreamRatingsApi.Models
     {
         public string UserId { get; set; }
         public string ProductId { get; set; }
+        public string LocationName { get; set; }
+        public int? Value { get; set; }
+        public string UserNotes { get; set; }
+        public DateTime Timestamp { get; set; }
+
+        public Rating()
+        {
+            Timestamp = DateTime.UtcNow;
+        }
 
         public bool IsValid()
         {
