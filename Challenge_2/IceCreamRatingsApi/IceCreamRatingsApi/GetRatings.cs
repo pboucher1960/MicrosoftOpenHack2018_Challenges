@@ -1,33 +1,31 @@
-using System.Linq;
-using System.Net;
-using System.Net.Http;
+using System;
+using System.IO;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
-using Microsoft.Azure.WebJobs.Host;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 
 namespace IceCreamRatingsApi
 {
     public static class GetRatings
     {
         [FunctionName("GetRatings")]
-        public static async Task<HttpResponseMessage> Run([HttpTrigger(AuthorizationLevel.Function, "get", Route = null)]HttpRequestMessage req, TraceWriter log)
+        public static async Task<IActionResult> Run(
+            [HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req,
+            ILogger log)
         {
-             // parse query parameter
-            string userId = req.GetQueryNameValuePairs()
-                .FirstOrDefault(q => string.Compare(q.Key, "userId", true) == 0)
-                .Value;
+            string userId = req.Query["userId"];
 
-            if (userId == null)
-            {
-                // Get request body
-                dynamic data = await req.Content.ReadAsAsync<object>();
-                userId = data?.userId;
-            }
+            string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+            dynamic data = JsonConvert.DeserializeObject(requestBody);
+            userId = userId ?? data?.userId;
 
-            return userId == null
-                ? req.CreateResponse(HttpStatusCode.BadRequest, "Please pass a user identifier on the query string or in the request body")
-                : req.CreateResponse(HttpStatusCode.OK, "Hello " + userId);
+            return userId != null
+                ? (ActionResult)new OkObjectResult($"Hello, {userId}")
+                : new BadRequestObjectResult("Please pass a product identifier on the query string or in the request body");
         }
     }
 }
