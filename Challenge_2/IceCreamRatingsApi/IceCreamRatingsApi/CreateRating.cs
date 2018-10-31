@@ -16,10 +16,11 @@ namespace IceCreamRatingsApi
             log.Info("C# HTTP trigger function processed a request.");
 
             dynamic data = await req.Content.ReadAsAsync<object>();
-            Models.Rating rating = new Models.Rating();
-
-            rating.UserId = data?.userId;
-            rating.ProductId = data?.productId;
+            Models.Rating rating = new Models.Rating
+            {
+                UserId = data?.userId,
+                ProductId = data?.productId
+            };
 
             if (!rating.IsValid())
             {
