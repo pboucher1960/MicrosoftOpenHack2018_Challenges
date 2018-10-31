@@ -51,10 +51,11 @@ namespace IceCreamRatingsApi
                 return new BadRequestObjectResult("Rating should be between 0 and 5");
             }
 
+            rating.LocationName = data?.locationName;
             rating.UserNotes = data?.userNotes;
-            rating.Value = data?.rating;
+            rating.RatingValue = data?.rating;
 
-            //Call Patricio's code
+            //TODO: Call Patricio's code
 
             return new OkObjectResult("Rating created");
         }
@@ -75,7 +76,7 @@ namespace IceCreamRatingsApi
 
         public static async Task<Models.User> GetUserId(Models.Rating rating)
         {
-            HttpResponseMessage response = await CallApi("https://serverlessohuser.trafficmanager.net/api/GetUser?userId=?" + rating.UserId);
+            HttpResponseMessage response = await CallApi("https://serverlessohuser.trafficmanager.net/api/GetUser?userId=" + rating.UserId);
 
             if (response.IsSuccessStatusCode)
             {

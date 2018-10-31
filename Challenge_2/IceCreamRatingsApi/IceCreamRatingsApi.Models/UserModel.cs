@@ -5,7 +5,7 @@ namespace IceCreamRatingsApi.Models
     [DataContract]
     public class User
     {
-        [DataMember(Name = "uerId")]
+        [DataMember(Name = "userId")]
         public string UserId { get; set; }
         [DataMember(Name="userName")]
         public string UserName { get; set; }

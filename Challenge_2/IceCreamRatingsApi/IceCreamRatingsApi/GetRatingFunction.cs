@@ -7,7 +7,7 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using IceCreamRatingsApi.Models;
+using IceCreamRatingsApi.Infrastructure;
 
 namespace IceCreamRatingsApi
 {
@@ -37,7 +37,6 @@ namespace IceCreamRatingsApi
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
 
-            RatingRepository dbRepos = null;
             string ratingId = req.Query["ratingId"];
 
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
@@ -49,18 +48,16 @@ namespace IceCreamRatingsApi
 
             try
             {
-                dbRepos = new RatingRepository();
-                var ratingFound = dbRepos.Find(ratingId);
-                if(ratingFound != null)
-                    return (ActionResult)new OkObjectResult(ratingFound);
+                using (var dbRepos = new RatingRepository())
+                {
+                    var ratingFound = dbRepos.Find(ratingId);
+                    if (ratingFound != null)
+                        return new OkObjectResult(ratingFound);
+                }
             }
             catch (Exception)
             {
 
-            }
-            finally
-            {
-                //dbRepos?.Close();
             }
 
             return new NotFoundObjectResult($"The rating cannot be found {ratingId}");
