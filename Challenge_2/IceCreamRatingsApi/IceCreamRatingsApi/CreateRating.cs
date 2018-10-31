@@ -7,15 +7,15 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using System.Net.Http;
+using System.Net.Http.Headers;
 
 namespace IceCreamRatingsApi
 {
     public static class CreateRating
     {
         [FunctionName("CreateRating")]
-        public static async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
-            ILogger log)
+        public static async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req, ILogger log)
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
 
@@ -32,33 +32,71 @@ namespace IceCreamRatingsApi
                 return new BadRequestObjectResult("UserId or ProductId is missing from data");
             }
 
-            try
+            Models.Product product = await GetProductId(rating);
+
+            if (product == null)
             {
-                int.Parse(data?.rating);
+                return new BadRequestObjectResult("Invalid productId: " + rating.ProductId);
             }
-            catch (Exception e)
+
+            Models.User user = await GetUserId(rating);
+
+            if (user == null)
             {
-                return new BadRequestObjectResult("Rating should be integer");
+                return new BadRequestObjectResult("Invalid userId: " + rating.UserId);
+            }
+
+            if (data?.rating > 5 || data?.rating < 0)
+            {
+                return new BadRequestObjectResult("Rating should be between 0 and 5");
             }
 
             rating.UserNotes = data?.userNotes;
             rating.Value = data?.rating;
 
-            return new OkObjectResult("Created");
+            //Call Patricio's code
+
+            return new OkObjectResult("Rating created");
         }
 
-        private static string GetProductId(Models.Rating rating)
+        public static async Task<Models.Product> GetProductId(Models.Rating rating)
         {
-            //https://serverlessohproduct.trafficmanager.net/api/GetProduct?productId=rating.ProductId
+            HttpResponseMessage response = await CallApi("https://serverlessohproduct.trafficmanager.net/api/GetProduct?productId=" + rating.ProductId);
 
-            return "";
+            if (response.IsSuccessStatusCode)
+            {
+                Models.Product product = await response.Content.ReadAsAsync<Models.Product>();
+
+                return product;
+            }
+
+            return null;
         }
 
-        private static string GetUserId(Models.Rating rating)
+        public static async Task<Models.User> GetUserId(Models.Rating rating)
         {
-            //https://serverlessohuser.trafficmanager.net/api/GetUser?userId=rating.UserId
+            HttpResponseMessage response = await CallApi("https://serverlessohuser.trafficmanager.net/api/GetUser?userId=?" + rating.UserId);
 
-            return "";
+            if (response.IsSuccessStatusCode)
+            {
+                Models.User user = await response.Content.ReadAsAsync<Models.User>();
+
+                return user;
+            }
+
+            return null;
+        }
+
+        private static async Task<HttpResponseMessage> CallApi(string url)
+        {
+            HttpClient client = new HttpClient();
+            client.BaseAddress = new Uri(url);
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            HttpResponseMessage response = await client.GetAsync(url);
+
+            return response;
         }
     }
 }

@@ -1,15 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace Infrastructure
+namespace IceCreamRatingsApi.Models
 {
     public interface IRating
     {
         string Id { get; set; }
         string ProductId { get; set; }
 
-        string TimeStamp { get; set; }
+        DateTime TimeStamp { get; set; }
 
         string LocationName { get; set; }
 

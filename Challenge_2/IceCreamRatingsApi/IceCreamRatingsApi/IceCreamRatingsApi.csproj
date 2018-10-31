@@ -7,6 +7,7 @@
     <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="1.0.*" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\IceCreamRatingsApi.Models\IceCreamRatingsApi.Models.csproj" />
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
   </ItemGroup>
   <ItemGroup>
