@@ -1,6 +1,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Infrastructure.Test
+namespace IceCreamRatingsApi.Infrastructure.Test
 {
     [TestClass]
     public class RatingTest
@@ -9,7 +9,7 @@ namespace Infrastructure.Test
         public void FindReturnsCollection()
         {
 
-            var rating = new Infrastructure.Rating();
+            var rating = new Infrastructure.RatingRepository();
 
             var result = rating.FindAsync();
 

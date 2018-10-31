@@ -2,7 +2,7 @@
 
 namespace IceCreamRatingsApi.Models
 {
-    public class Rating
+    public class Rating:IRating
     {
         public string Id { get; set; }
         public string UserId { get; set; }
@@ -10,12 +10,13 @@ namespace IceCreamRatingsApi.Models
         public string LocationName { get; set; }
         public int? Value { get; set; }
         public string UserNotes { get; set; }
-        public DateTime Timestamp { get; set; }
+        public DateTime TimeStamp { get ; set; }
+        public string RatingValue { get; set; }
 
         public Rating()
         {
             Id = Guid.NewGuid().ToString();
-            Timestamp = DateTime.UtcNow;
+            TimeStamp = DateTime.UtcNow;
         }
 
         public bool IsValid()

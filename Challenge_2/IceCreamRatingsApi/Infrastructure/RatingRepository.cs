@@ -7,14 +7,14 @@ using Microsoft.Azure.Documents;
 using Microsoft.Azure.Documents.Client;
 using Newtonsoft.Json;
 using IceCreamRatingsApi.Models.DbAccess;
+using IceCreamRatingsApi.Models;
 
-
-
-namespace IceCreamRatingsApi.Models
+namespace IceCreamRatingsApi.Infrastructure
 {
     public class RatingRepository : IRatingRepository
     {
         private const string databaseName = "OpenHackTable08";
+        private const string collectionName = "RatingCollection";
         private const string EndpointUrl = "https://openhacktable08.documents.azure.com:443";
         private const string PrimaryKey = "VZFwRgdsJhhlPXgeQVCmtgTBv1W09VICD91MYUXbIyVEEQRrVYvmOKasaZW6Pax1hsKfw7XRZeEa4Hp453LxjQ==";
         private DocumentClient client;
@@ -31,9 +31,47 @@ namespace IceCreamRatingsApi.Models
         {
             await this.client.CreateDatabaseIfNotExistsAsync(new Database { Id = databaseName });
             await this.client.CreateDocumentCollectionIfNotExistsAsync(UriFactory.CreateDatabaseUri(databaseName), new DocumentCollection { Id = "RatingCollection" });
+
+            // ADD THIS PART TO YOUR CODE
+            Rating rating = new Rating
+            {
+                Id = "79c2779e-dd2e-43e8-803d-ecbebed8972c",
+                UserId = "cc20a6fb-a91f-4192-874d-132493685376",
+                ProductId = "4c25613a-a3c2-4ef3-8e02-9c335eb23204",
+                TimeStamp = DateTime.Now,
+                LocationName = "Sample ice cream shop",
+                RatingValue = "5",
+                UserNotes = "I love the subtle notes of orange in this ice cream!"
+            };
+
+            await this.CreateDocumentIfNotExists(databaseName, "RatingCollection", rating);
+
         }
 
-            public async Task<object> FindAsync()
+
+        // ADD THIS PART TO YOUR CODE
+        private async Task CreateDocumentIfNotExists(string databaseName, string collectionName, Rating rating)
+        {
+            try
+            {
+                await this.client.ReadDocumentAsync(UriFactory.CreateDocumentUri(databaseName, collectionName, rating.Id));
+                
+            }
+            catch (DocumentClientException de)
+            {
+                if (de.StatusCode == HttpStatusCode.NotFound)
+                {
+                    await this.client.CreateDocumentAsync(UriFactory.CreateDocumentCollectionUri(databaseName, collectionName), rating);
+                    
+                }
+                else
+                {
+                    throw;
+                }
+            }
+        }
+
+        public async Task<object> FindAsync()
         {
             try
             {

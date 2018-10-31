@@ -11,7 +11,7 @@ namespace IceCreamRatingsApi.Models
 
         string LocationName { get; set; }
 
-        string Rating { get; set; }
+        string RatingValue { get; set; }
 
         string UserNotes { get; set; }
     }
