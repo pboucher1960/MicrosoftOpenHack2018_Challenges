@@ -5,12 +5,13 @@ using System.Net;
 using Microsoft.Azure.Documents;
 using Microsoft.Azure.Documents.Client;
 using Newtonsoft.Json;
+using IceCreamRatingsApi.Models.DbAccess;
 
 
 
-namespace Infrastructure
+namespace IceCreamRatingsApi.Models
 {
-    public class Rating
+    public class RatingRepository : IRatingRepository
     {
         private const string databaseName = "OpenHackTable08";
         private const string EndpointUrl = "https://openhacktable08.documents.azure.com:10255";
@@ -18,7 +19,7 @@ namespace Infrastructure
         private DocumentClient client;
 
 
-        public Rating()
+        public RatingRepository()
         {
 
         }

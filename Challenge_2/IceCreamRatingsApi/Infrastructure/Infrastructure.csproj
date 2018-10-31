@@ -8,4 +8,8 @@
     <PackageReference Include="Microsoft.Azure.DocumentDB.Core" Version="2.1.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\IceCreamRatingsApi.Models\IceCreamRatingsApi.Models.csproj" />
+  </ItemGroup>
+
 </Project>
