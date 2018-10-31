@@ -41,5 +41,19 @@ namespace IceCreamRatingsApi
 
             return req.CreateResponse(HttpStatusCode.OK, "Hello");
         }
+
+        private static string GetProductId(Models.Rating rating)
+        {
+            //https://serverlessohproduct.trafficmanager.net/api/GetProduct
+
+            return "";
+        }
+
+        private static string GetUserId(Models.Rating rating)
+        {
+            //https://serverlessohuser.trafficmanager.net/api/GetUser
+
+            return "";
+        }
     }
 }
