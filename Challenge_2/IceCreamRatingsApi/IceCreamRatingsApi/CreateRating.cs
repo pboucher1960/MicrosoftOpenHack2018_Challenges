@@ -26,6 +26,18 @@ namespace IceCreamRatingsApi
                 return req.CreateResponse(HttpStatusCode.BadRequest, "UserId or ProductId is missing from data");
             }
 
+            try
+            {
+                int.Parse(data?.rating);
+            }
+            catch (CookieException e)
+            {
+                return req.CreateResponse(HttpStatusCode.BadRequest, "Rating should be integer");
+            }
+
+            rating.UserNotes = data?.userNotes;
+            rating.Value = data?.rating;
+
             return req.CreateResponse(HttpStatusCode.OK, "Hello");
         }
     }
