@@ -46,17 +46,15 @@ namespace IceCreamRatingsApi
                 return new BadRequestObjectResult("Invalid userId: " + rating.UserId);
             }
 
-            try
+            if (data?.rating > 5 || data?.rating < 0)
             {
-                int.Parse(data?.rating);
-            }
-            catch (Exception e)
-            {
-                return new BadRequestObjectResult("Rating should be an integer");
+                return new BadRequestObjectResult("Rating should be between 0 and 5");
             }
 
             rating.UserNotes = data?.userNotes;
             rating.Value = data?.rating;
+
+            //Call Patricio's code
 
             return new OkObjectResult("Rating created");
         }
