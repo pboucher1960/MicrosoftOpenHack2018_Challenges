@@ -1,21 +1,26 @@
-using System.Linq;
-using System.Net;
-using System.Net.Http;
+using System;
+using System.IO;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
-using Microsoft.Azure.WebJobs.Host;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 
 namespace IceCreamRatingsApi
 {
     public static class CreateRating
     {
         [FunctionName("CreateRating")]
-        public static async Task<HttpResponseMessage> Run([HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)]HttpRequestMessage req, TraceWriter log)
+        public static async Task<IActionResult> Run(
+            [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
+            ILogger log)
         {
-            log.Info("C# HTTP trigger function processed a request.");
+            log.LogInformation("C# HTTP trigger function processed a request.");
 
-            dynamic data = await req.Content.ReadAsAsync<object>();
+            string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+            dynamic data = JsonConvert.DeserializeObject(requestBody);
             Models.Rating rating = new Models.Rating
             {
                 UserId = data?.userId,
@@ -24,34 +29,34 @@ namespace IceCreamRatingsApi
 
             if (!rating.IsValid())
             {
-                return req.CreateResponse(HttpStatusCode.BadRequest, "UserId or ProductId is missing from data");
+                return new BadRequestObjectResult("UserId or ProductId is missing from data");
             }
 
             try
             {
                 int.Parse(data?.rating);
             }
-            catch (CookieException e)
+            catch (Exception e)
             {
-                return req.CreateResponse(HttpStatusCode.BadRequest, "Rating should be integer");
+                return new BadRequestObjectResult("Rating should be integer");
             }
 
             rating.UserNotes = data?.userNotes;
             rating.Value = data?.rating;
 
-            return req.CreateResponse(HttpStatusCode.OK, "Hello");
+            return new OkObjectResult("Created");
         }
 
         private static string GetProductId(Models.Rating rating)
         {
-            //https://serverlessohproduct.trafficmanager.net/api/GetProduct
+            //https://serverlessohproduct.trafficmanager.net/api/GetProduct?productId=rating.ProductId
 
             return "";
         }
 
         private static string GetUserId(Models.Rating rating)
         {
-            //https://serverlessohuser.trafficmanager.net/api/GetUser
+            //https://serverlessohuser.trafficmanager.net/api/GetUser?userId=rating.UserId
 
             return "";
         }
