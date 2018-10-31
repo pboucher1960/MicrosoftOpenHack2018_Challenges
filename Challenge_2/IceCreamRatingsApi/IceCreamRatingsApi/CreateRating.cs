@@ -75,7 +75,7 @@ namespace IceCreamRatingsApi
 
         public static async Task<Models.User> GetUserId(Models.Rating rating)
         {
-            HttpResponseMessage response = await CallApi("https://serverlessohuser.trafficmanager.net/api/GetUser?userId=?" + rating.UserId);
+            HttpResponseMessage response = await CallApi("https://serverlessohuser.trafficmanager.net/api/GetUser?userId=" + rating.UserId);
 
             if (response.IsSuccessStatusCode)
             {
