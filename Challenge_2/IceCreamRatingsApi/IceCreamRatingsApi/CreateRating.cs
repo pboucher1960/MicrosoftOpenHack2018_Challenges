@@ -32,19 +32,33 @@ namespace IceCreamRatingsApi
                 return new BadRequestObjectResult("UserId or ProductId is missing from data");
             }
 
+            Models.Product product = await GetProductId(rating);
+
+            if (product == null)
+            {
+                return new BadRequestObjectResult("Invalid productId: " + rating.ProductId);
+            }
+
+            Models.User user = await GetUserId(rating);
+
+            if (user == null)
+            {
+                return new BadRequestObjectResult("Invalid userId: " + rating.UserId);
+            }
+
             try
             {
                 int.Parse(data?.rating);
             }
             catch (Exception e)
             {
-                return new BadRequestObjectResult("Rating should be integer");
+                return new BadRequestObjectResult("Rating should be an integer");
             }
 
             rating.UserNotes = data?.userNotes;
             rating.Value = data?.rating;
 
-            return new OkObjectResult("Created");
+            return new OkObjectResult("Rating created");
         }
 
         public static async Task<Models.Product> GetProductId(Models.Rating rating)
@@ -61,11 +75,18 @@ namespace IceCreamRatingsApi
             return null;
         }
 
-        public static string GetUserId(Models.Rating rating)
+        public static async Task<Models.User> GetUserId(Models.Rating rating)
         {
-            //https://serverlessohuser.trafficmanager.net/api/GetUser?userId=rating.UserId
+            HttpResponseMessage response = await CallApi("https://serverlessohuser.trafficmanager.net/api/GetUser?userId=?" + rating.UserId);
 
-            return "";
+            if (response.IsSuccessStatusCode)
+            {
+                Models.User user = await response.Content.ReadAsAsync<Models.User>();
+
+                return user;
+            }
+
+            return null;
         }
 
         private static async Task<HttpResponseMessage> CallApi(string url)
