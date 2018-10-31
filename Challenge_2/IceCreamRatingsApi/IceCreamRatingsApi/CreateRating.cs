@@ -61,7 +61,7 @@ namespace IceCreamRatingsApi
 
         public static async Task<Models.Product> GetProductId(Models.Rating rating)
         {
-            HttpResponseMessage response = await CallApi("https://serverlessohproduct.trafficmanager.net/api/GetProduct?productId=" + rating.ProductId);
+            HttpResponseMessage response = await CallApi("GetProduct?productId=" + rating.ProductId);
 
             if (response.IsSuccessStatusCode)
             {
@@ -75,7 +75,7 @@ namespace IceCreamRatingsApi
 
         public static async Task<Models.User> GetUserId(Models.Rating rating)
         {
-            HttpResponseMessage response = await CallApi("https://serverlessohuser.trafficmanager.net/api/GetUser?userId=?" + rating.UserId);
+            HttpResponseMessage response = await CallApi("GetUser?userId=" + rating.UserId);
 
             if (response.IsSuccessStatusCode)
             {
@@ -87,9 +87,11 @@ namespace IceCreamRatingsApi
             return null;
         }
 
-        private static async Task<HttpResponseMessage> CallApi(string url)
+        private static async Task<HttpResponseMessage> CallApi(string param)
         {
+            const string baseUrl = "https://serverlessohproduct.trafficmanager.net/api/";
             HttpClient client = new HttpClient();
+            string url = baseUrl + param;
             client.BaseAddress = new Uri(url);
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
