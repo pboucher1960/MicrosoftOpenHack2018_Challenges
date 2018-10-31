@@ -3,8 +3,12 @@ using System.Runtime.Serialization;
 
 namespace IceCreamRatingsApi.Models
 {
-    [DataContract]
+<<<<<<< Updated upstream
     public class Rating:IRating
+=======
+    [DataContract]
+    public class Rating
+>>>>>>> Stashed changes
     {
         [DataMember(Name = "id")]
         public string Id { get; set; }
@@ -15,11 +19,16 @@ namespace IceCreamRatingsApi.Models
         [DataMember(Name = "locationName")]
         public string LocationName { get; set; }
         [DataMember(Name = "rating")]
-        public int RatingValue { get; set; }
+        public int Value { get; set; }
         [DataMember(Name = "userNotes")]
         public string UserNotes { get; set; }
+<<<<<<< Updated upstream
+        public DateTime TimeStamp { get ; set; }
+        public string RatingValue { get; set; }
+=======
         [DataMember(Name = "timestamp")]
-        public DateTime TimeStamp { get; set; }
+        public DateTime Timestamp { get; set; }
+>>>>>>> Stashed changes
 
         public Rating()
         {

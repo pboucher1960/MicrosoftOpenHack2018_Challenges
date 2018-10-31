@@ -40,7 +40,7 @@ namespace IceCreamRatingsApi.Infrastructure
                 ProductId = "4c25613a-a3c2-4ef3-8e02-9c335eb23204",
                 TimeStamp = DateTime.Now,
                 LocationName = "Sample ice cream shop",
-                RatingValue = "5",
+                RatingValue = 5,
                 UserNotes = "I love the subtle notes of orange in this ice cream!"
             };
 
