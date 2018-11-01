@@ -129,6 +129,7 @@
                 result.ProductId = created.GetPropertyValue<string>("productId");
                 result.TimeStamp =  created.GetPropertyValue<DateTime>("timeStamp");
                 result.UserNotes = created.GetPropertyValue<string>("userNotes");
+                result.Version = created.GetPropertyValue<string>("version");
                 /* and so on, for all the properties of Employee */
 
                 return result;

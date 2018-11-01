@@ -6,6 +6,9 @@
 
     public class UserRating:IUserRating
     {
+        [JsonProperty(PropertyName = "version")]
+        public string Version { get; set; }
+
         [JsonProperty(PropertyName = "id")]
         public string Id { get; set; }
 
