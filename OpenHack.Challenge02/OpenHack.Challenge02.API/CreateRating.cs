@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using OpenHack.Challenge02.Models;
 
 namespace OpenHack.Challenge02.API
 {
@@ -53,11 +54,11 @@ namespace OpenHack.Challenge02.API
 
             rating.UserNotes = data?.userNotes;
             rating.Rating = data?.rating;
-            rating.LocationName = data?.locationName;
+			rating.LocationName = data?.locationName;
 
             Infrastructure.UserRatingManager.AddAsync(rating).Wait();
 
-            return new OkObjectResult(rating);
+            return new OkObjectResult("Rating created");
         }
 
         public static async Task<Models.Product> GetProductId(Models.UserRating rating)
