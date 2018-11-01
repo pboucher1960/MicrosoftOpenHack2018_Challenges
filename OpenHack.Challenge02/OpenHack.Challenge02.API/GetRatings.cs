@@ -18,22 +18,18 @@ namespace OpenHack.Challenge02.API
             [HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req,
             ILogger log)
         {
-            //string userId = req.Query["userId"];
+            string userId = req.Query["userId"];
 
-            //string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            //dynamic data = JsonConvert.DeserializeObject(requestBody);
-            //userId = userId ?? data?.userId;
+            string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+            dynamic data = JsonConvert.DeserializeObject(requestBody);
+            userId = userId ?? data?.userId;
 
             var rating = new UserRatingManager();
-            //var result = rating.FindByUserId(userId);
+            var result = rating.FindByUserId(userId);         
 
-            var result = rating.Find();
-
-            return new OkObjectResult(result);
-
-            //return userId != null
-            //    ? (ActionResult)new OkObjectResult(result)
-            //    : new BadRequestObjectResult("Please pass a product identifier on the query string or in the request body");
+            return userId != null
+                ? (ActionResult)new OkObjectResult(result)
+                : new BadRequestObjectResult("Please pass a product identifier on the query string or in the request body");
         }
     }
 }
