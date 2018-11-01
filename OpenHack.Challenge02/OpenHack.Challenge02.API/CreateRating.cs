@@ -15,7 +15,7 @@ namespace OpenHack.Challenge02.API
     public static class CreateRating
     {
         [FunctionName("CreateRating")]
-        public static async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req, ILogger log)
+        public static async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req, ILogger log)
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
 
@@ -61,42 +61,34 @@ namespace OpenHack.Challenge02.API
 
         public static async Task<Models.Product> GetProductId(Models.UserRating rating)
         {
-            HttpResponseMessage response = await CallApi("GetProduct?productId=" + rating.ProductId);
-
+            HttpResponseMessage response = await CallApi("https://serverlessohproduct.trafficmanager.net/api/","GetProduct?productId=" + rating.ProductId);
             if (response.IsSuccessStatusCode)
             {
                 Models.Product product = await response.Content.ReadAsAsync<Models.Product>();
-
                 return product;
             }
-
             return null;
         }
 
         public static async Task<Models.User> GetUserId(Models.UserRating rating)
         {
-            HttpResponseMessage response = await CallApi("GetUser?userId=" + rating.UserId);
-
+            HttpResponseMessage response = await CallApi("https://serverlessohuser.trafficmanager.net/api/", "GetUser?userId=" + rating.UserId);
             if (response.IsSuccessStatusCode)
             {
                 Models.User user = await response.Content.ReadAsAsync<Models.User>();
-
                 return user;
             }
-
             return null;
         }
 
-        private static async Task<HttpResponseMessage> CallApi(string param)
+        private static async Task<HttpResponseMessage> CallApi(string url, string param)
         {
-            const string baseUrl = "https://serverlessohproduct.trafficmanager.net/api/";
             HttpClient client = new HttpClient();
-            string url = baseUrl + param;
-            client.BaseAddress = new Uri(url);
+            client.BaseAddress = new Uri(url + param);
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            HttpResponseMessage response = await client.GetAsync(url);
+            HttpResponseMessage response = await client.GetAsync(url + param);
 
             return response;
         }
