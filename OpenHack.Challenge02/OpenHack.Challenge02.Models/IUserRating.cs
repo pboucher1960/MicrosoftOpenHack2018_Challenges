@@ -11,7 +11,7 @@
 
         string LocationName { get; set; }
 
-        string RatingValue { get; set; }
+        int Rating { get; set; }
 
         string UserNotes { get; set; }
     }

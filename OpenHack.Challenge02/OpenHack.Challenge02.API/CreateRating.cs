@@ -47,7 +47,7 @@ namespace OpenHack.Challenge02.API
                 return new BadRequestObjectResult("Invalid userId: " + rating.UserId);
             }
 
-            if (data?.rating > 5 || data?.rating < 0)
+            if (data?.rating == null || data?.rating > 5 || data?.rating < 0)
             {
                 return new BadRequestObjectResult("Rating should be between 0 and 5");
             }
@@ -55,10 +55,11 @@ namespace OpenHack.Challenge02.API
             rating.UserNotes = data?.userNotes;
             rating.Rating = data?.rating;
 			rating.LocationName = data?.locationName;
+            rating.Rating = data?.rating;
 
-            Infrastructure.UserRatingManager.AddAsync(rating).Wait();
+            var result = await Infrastructure.UserRatingManager.AddAsync(rating);
 
-            return new OkObjectResult("Rating created");
+            return new OkObjectResult(result);
         }
 
         public static async Task<Models.Product> GetProductId(Models.UserRating rating)

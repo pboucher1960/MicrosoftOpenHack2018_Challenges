@@ -19,16 +19,13 @@
         public string LocationName { get; set; }
 
         [JsonProperty(PropertyName = "rating")]
-        public int? Rating { get; set; }
+        public int Rating { get; set; }
 
-        [DataMember(Name = "userNotes")]
+        [JsonProperty(PropertyName = "userNotes")]
         public string UserNotes { get; set; }
 
         [JsonProperty(PropertyName = "timeStamp")]
         public DateTime TimeStamp { get ; set; }
-
-
-        public string RatingValue { get; set; }
 
         public UserRating()
         {

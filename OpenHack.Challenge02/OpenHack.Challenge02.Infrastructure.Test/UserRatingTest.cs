@@ -34,7 +34,7 @@ namespace OpenHack.Challenge02.Infrastructure.Test
                 Id = Guid.NewGuid().ToString(),
                 UserId = "Test-UserId",
                 LocationName = "Test-Location",
-                RatingValue = "5",
+                Rating = 5,
                 UserNotes = "Test-UserNotes",
                 TimeStamp = DateTime.Now
             };

@@ -9,7 +9,7 @@
     using Microsoft.Azure.Documents.Client;
     using OpenHack.Challenge02.Models;
 
-    public class UserRatingManager
+    public class UserRatingManager 
     {
         private const string databaseName = "OpenHackTable08";
         private const string collectionName = "UserRatingCollection";
@@ -66,7 +66,10 @@
                 UriFactory.CreateDocumentCollectionUri(databaseName, collectionName),
                 "SELECT * FROM UserRatingCollection WHERE UserRatingCollection.id = '" + ratingId + "'", queryOptions);
                 System.Diagnostics.Debug.WriteLine("Running direct SQL query...");
-                return ratingQueryInSql.FirstOrDefault();
+
+                var result = ratingQueryInSql.ToList();
+
+                return result.FirstOrDefault();
 
             }
             catch (DocumentClientException de)
@@ -111,6 +114,7 @@
 
         public static async Task<UserRating> AddAsync(UserRating rating)
         {
+            //THIS IS A CHANGE THAT DOES NOTHING
             System.Diagnostics.Debug.WriteLine("AddAsync");
             try
             {
@@ -120,10 +124,11 @@
                 UserRating result = new UserRating();
                 result.Id = created.GetPropertyValue<string>("id");
                 result.LocationName = created.GetPropertyValue<string>("locationName");
-                result.RatingValue = created.GetPropertyValue<string>("RatingValue");
+                result.Rating = created.GetPropertyValue<int>("rating");
                 result.UserId = created.GetPropertyValue<string>("userId");
                 result.ProductId = created.GetPropertyValue<string>("productId");
                 result.TimeStamp =  created.GetPropertyValue<DateTime>("timeStamp");
+                result.UserNotes = created.GetPropertyValue<string>("userNotes");
                 /* and so on, for all the properties of Employee */
 
                 return result;
