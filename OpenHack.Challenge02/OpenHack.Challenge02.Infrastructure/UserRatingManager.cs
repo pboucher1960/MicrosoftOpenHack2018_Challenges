@@ -59,7 +59,28 @@
 
         public IUserRating Find(string ratingId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                FeedOptions queryOptions = new FeedOptions { MaxItemCount = -1 };
+                IQueryable<UserRating> ratingQueryInSql = client.CreateDocumentQuery<UserRating>(
+                UriFactory.CreateDocumentCollectionUri(databaseName, collectionName),
+                "SELECT * FROM UserRatingCollection WHERE UserRatingCollection.id = '" + ratingId + "'", queryOptions);
+                System.Diagnostics.Debug.WriteLine("Running direct SQL query...");
+                return ratingQueryInSql.FirstOrDefault();
+
+            }
+            catch (DocumentClientException de)
+            {
+                Exception baseException = de.GetBaseException();
+                Console.WriteLine("{0} error occurred: {1}, Message: {2}", de.StatusCode, de.Message, baseException.Message);
+                throw;
+            }
+            catch (Exception e)
+            {
+                Exception baseException = e.GetBaseException();
+                Console.WriteLine("Error: {0}, Message: {1}", e.Message, baseException.Message);
+                throw;
+            }
         }
 
         public IEnumerable<IUserRating> FindByUserId(string userId)
@@ -70,7 +91,6 @@
                 IQueryable<UserRating> ratingQueryInSql = client.CreateDocumentQuery<UserRating>(
                 UriFactory.CreateDocumentCollectionUri(databaseName, collectionName),
                 "SELECT * FROM UserRatingCollection WHERE UserRatingCollection.userId = '" + userId + "'", queryOptions);
-
                 System.Diagnostics.Debug.WriteLine("Running direct SQL query...");
                 return ratingQueryInSql.ToList();
 
