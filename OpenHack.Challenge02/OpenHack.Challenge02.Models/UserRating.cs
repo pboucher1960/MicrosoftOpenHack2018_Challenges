@@ -33,6 +33,7 @@
         public UserRating()
         {
             TimeStamp = DateTime.UtcNow;
+            Id = Guid.NewGuid().ToString();
         }
 
         public bool IsValid()
