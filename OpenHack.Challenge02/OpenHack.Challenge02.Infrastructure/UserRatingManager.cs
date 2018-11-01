@@ -9,7 +9,7 @@
     using Microsoft.Azure.Documents.Client;
     using OpenHack.Challenge02.Models;
 
-    public class UserRatingManager
+    public class UserRatingManager 
     {
         private const string databaseName = "OpenHackTable08";
         private const string collectionName = "UserRatingCollection";
