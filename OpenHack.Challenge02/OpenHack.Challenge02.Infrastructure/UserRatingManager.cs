@@ -109,13 +109,24 @@
             }
         }
 
-        public static async Task AddAsync(UserRating rating)
+        public static async Task<UserRating> AddAsync(UserRating rating)
         {
             System.Diagnostics.Debug.WriteLine("AddAsync");
             try
             {
                 Document created = await client.CreateDocumentAsync(UriFactory.CreateDocumentCollectionUri(databaseName, collectionName), rating);
                 System.Diagnostics.Debug.WriteLine(created.Id);
+
+                UserRating result = new UserRating();
+                result.Id = created.GetPropertyValue<string>("id");
+                result.LocationName = created.GetPropertyValue<string>("locationName");
+                result.RatingValue = created.GetPropertyValue<string>("RatingValue");
+                result.UserId = created.GetPropertyValue<string>("userId");
+                result.ProductId = created.GetPropertyValue<string>("productId");
+                result.TimeStamp =  created.GetPropertyValue<DateTime>("timeStamp");
+                /* and so on, for all the properties of Employee */
+
+                return result;
             }
             catch (DocumentClientException de)
             {
