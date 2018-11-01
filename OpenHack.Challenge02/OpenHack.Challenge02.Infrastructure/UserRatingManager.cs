@@ -66,7 +66,10 @@
                 UriFactory.CreateDocumentCollectionUri(databaseName, collectionName),
                 "SELECT * FROM UserRatingCollection WHERE UserRatingCollection.id = '" + ratingId + "'", queryOptions);
                 System.Diagnostics.Debug.WriteLine("Running direct SQL query...");
-                return ratingQueryInSql.FirstOrDefault();
+
+                var result = ratingQueryInSql.ToList();
+
+                return result.FirstOrDefault();
 
             }
             catch (DocumentClientException de)
