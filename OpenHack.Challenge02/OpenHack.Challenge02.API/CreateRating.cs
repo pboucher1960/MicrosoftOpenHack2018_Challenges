@@ -53,10 +53,11 @@ namespace OpenHack.Challenge02.API
 
             rating.UserNotes = data?.userNotes;
             rating.Rating = data?.rating;
+            rating.LocationName = data?.locationName;
 
             Infrastructure.UserRatingManager.AddAsync(rating).Wait();
 
-            return new OkObjectResult("Rating created");
+            return new OkObjectResult(rating);
         }
 
         public static async Task<Models.Product> GetProductId(Models.UserRating rating)
