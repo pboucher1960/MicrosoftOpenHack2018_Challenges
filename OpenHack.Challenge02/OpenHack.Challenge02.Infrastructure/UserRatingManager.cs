@@ -120,10 +120,11 @@
                 UserRating result = new UserRating();
                 result.Id = created.GetPropertyValue<string>("id");
                 result.LocationName = created.GetPropertyValue<string>("locationName");
-                result.RatingValue = created.GetPropertyValue<string>("RatingValue");
+                result.Rating = created.GetPropertyValue<int>("rating");
                 result.UserId = created.GetPropertyValue<string>("userId");
                 result.ProductId = created.GetPropertyValue<string>("productId");
                 result.TimeStamp =  created.GetPropertyValue<DateTime>("timeStamp");
+                result.UserNotes = created.GetPropertyValue<string>("userNotes");
                 /* and so on, for all the properties of Employee */
 
                 return result;
