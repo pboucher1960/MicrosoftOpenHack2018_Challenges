@@ -114,6 +114,7 @@
 
         public static async Task<UserRating> AddAsync(UserRating rating)
         {
+            //THIS IS A CHANGE THAT DOES NOTHING
             System.Diagnostics.Debug.WriteLine("AddAsync");
             try
             {
