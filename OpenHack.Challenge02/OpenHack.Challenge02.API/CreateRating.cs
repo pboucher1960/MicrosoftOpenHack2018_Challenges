@@ -46,7 +46,7 @@ namespace OpenHack.Challenge02.API
                 return new BadRequestObjectResult("Invalid userId: " + rating.UserId);
             }
 
-            if (data?.rating > 5 || data?.rating < 0)
+            if (data?.rating == null || data?.rating > 5 || data?.rating < 0)
             {
                 return new BadRequestObjectResult("Rating should be between 0 and 5");
             }
