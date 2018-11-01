@@ -1,21 +1,37 @@
-﻿using System;
-
-namespace IceCreamRatingsApi.Models
+﻿namespace IceCreamRatingsApi.Models
 {
-    public class Rating:IRating
+    using Newtonsoft.Json;
+    using System;
+    using System.Runtime.Serialization;
+
+    public class UserRating:IUserRating
     {
+        [JsonProperty(PropertyName = "id")]
         public string Id { get; set; }
+
+        [JsonProperty(PropertyName = "userId")]
         public string UserId { get; set; }
+
+        [JsonProperty(PropertyName = "productId")]
         public string ProductId { get; set; }
+
+        [JsonProperty(PropertyName = "locationName")]
         public string LocationName { get; set; }
-        public int? Value { get; set; }
+
+        [JsonProperty(PropertyName = "rating")]
+        public int? Rating { get; set; }
+
+        [DataMember(Name = "userNotes")]
         public string UserNotes { get; set; }
+
+        [JsonProperty(PropertyName = "timeStamp")]
         public DateTime TimeStamp { get ; set; }
+
+
         public string RatingValue { get; set; }
 
-        public Rating()
+        public UserRating()
         {
-            Id = Guid.NewGuid().ToString();
             TimeStamp = DateTime.UtcNow;
         }
 

@@ -21,7 +21,7 @@ namespace IceCreamRatingsApi
 
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             dynamic data = JsonConvert.DeserializeObject(requestBody);
-            Models.Rating rating = new Models.Rating
+            Models.UserRating rating = new Models.UserRating
             {
                 UserId = data?.userId,
                 ProductId = data?.productId
@@ -52,14 +52,14 @@ namespace IceCreamRatingsApi
             }
 
             rating.UserNotes = data?.userNotes;
-            rating.Value = data?.rating;
+            rating.Rating = data?.rating;
 
-            //Call Patricio's code
+            Infrastructure.UserRatingManager.AddAsync(rating).Wait();
 
             return new OkObjectResult("Rating created");
         }
 
-        public static async Task<Models.Product> GetProductId(Models.Rating rating)
+        public static async Task<Models.Product> GetProductId(Models.UserRating rating)
         {
             HttpResponseMessage response = await CallApi("GetProduct?productId=" + rating.ProductId);
 
@@ -73,7 +73,7 @@ namespace IceCreamRatingsApi
             return null;
         }
 
-        public static async Task<Models.User> GetUserId(Models.Rating rating)
+        public static async Task<Models.User> GetUserId(Models.UserRating rating)
         {
             HttpResponseMessage response = await CallApi("GetUser?userId=" + rating.UserId);
 
