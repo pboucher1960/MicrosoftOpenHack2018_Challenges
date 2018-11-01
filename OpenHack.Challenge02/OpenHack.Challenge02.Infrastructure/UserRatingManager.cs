@@ -1,4 +1,4 @@
-﻿namespace IceCreamRatingsApi.Infrastructure
+﻿namespace OpenHack.Challenge02.Infrastructure
 {
     using System;
     using System.Collections.Generic;
@@ -7,7 +7,7 @@
     using System.Threading.Tasks;
     using Microsoft.Azure.Documents;
     using Microsoft.Azure.Documents.Client;
-    using IceCreamRatingsApi.Models;
+    using OpenHack.Challenge02.Models;
 
     public class UserRatingManager
     {

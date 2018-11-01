@@ -1,6 +1,6 @@
 using System.Runtime.Serialization;
 
-namespace IceCreamRatingsApi.Models
+namespace OpenHack.Challenge02.Models
 {
     [DataContract]
     public class Product

@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace IceCreamRatingsApi.Models
+﻿namespace OpenHack.Challenge02.Models
 {
+    using System;
+
     public interface IUserRating
     {
         string Id { get; set; }

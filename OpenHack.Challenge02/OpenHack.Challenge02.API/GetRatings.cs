@@ -7,8 +7,9 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using OpenHack.Challenge02.Infrastructure;
 
-namespace IceCreamRatingsApi
+namespace OpenHack.Challenge02.API
 {
     public static class GetRatings
     {
@@ -17,15 +18,22 @@ namespace IceCreamRatingsApi
             [HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req,
             ILogger log)
         {
-            string userId = req.Query["userId"];
+            //string userId = req.Query["userId"];
 
-            string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            dynamic data = JsonConvert.DeserializeObject(requestBody);
-            userId = userId ?? data?.userId;
+            //string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+            //dynamic data = JsonConvert.DeserializeObject(requestBody);
+            //userId = userId ?? data?.userId;
 
-            return userId != null
-                ? (ActionResult)new OkObjectResult($"Hello, {userId}")
-                : new BadRequestObjectResult("Please pass a product identifier on the query string or in the request body");
+            var rating = new UserRatingManager();
+            //var result = rating.FindByUserId(userId);
+
+            var result = rating.Find();
+
+            return new OkObjectResult(result);
+
+            //return userId != null
+            //    ? (ActionResult)new OkObjectResult(result)
+            //    : new BadRequestObjectResult("Please pass a product identifier on the query string or in the request body");
         }
     }
 }

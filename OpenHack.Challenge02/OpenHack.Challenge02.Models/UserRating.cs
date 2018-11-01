@@ -1,4 +1,4 @@
-﻿namespace IceCreamRatingsApi.Models
+﻿namespace OpenHack.Challenge02.Models
 {
     using Newtonsoft.Json;
     using System;

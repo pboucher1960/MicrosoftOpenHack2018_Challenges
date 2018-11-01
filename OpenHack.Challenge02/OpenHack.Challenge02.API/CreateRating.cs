@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 using System.Net.Http;
 using System.Net.Http.Headers;
 
-namespace IceCreamRatingsApi
+namespace OpenHack.Challenge02.API
 {
     public static class CreateRating
     {
