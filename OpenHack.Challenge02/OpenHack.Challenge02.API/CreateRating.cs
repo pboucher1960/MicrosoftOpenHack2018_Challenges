@@ -58,7 +58,7 @@ namespace OpenHack.Challenge02.API
 
             Infrastructure.UserRatingManager.AddAsync(rating).Wait();
 
-            return new OkObjectResult("Rating created");
+            return new OkObjectResult(rating);
         }
 
         public static async Task<Models.Product> GetProductId(Models.UserRating rating)
